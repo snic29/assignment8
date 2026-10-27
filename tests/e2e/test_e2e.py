@@ -1,6 +1,7 @@
 # tests/e2e/test_e2e.py
 
 import pytest  # Import the pytest framework for writing and running tests
+from playwright.sync_api import expect
 
 # The following decorators and functions define E2E tests for the FastAPI calculator application.
 
@@ -41,9 +42,9 @@ def test_calculator_add(page, fastapi_server):
     # Click the button that has the exact text "Add". This triggers the addition operation.
     page.click('button:text("Add")')
     
-    # Use an assertion to check that the text within the result div (with id 'result') is exactly "Result: 15".
+    # Use an assertion to check that the text within the result div (with id 'result') is exactly "Calculation Result: 15".
     # This verifies that the addition operation was performed correctly and the result is displayed as expected.
-    assert page.inner_text('#result') == 'Calculation Result: 15'
+    expect(page.locator('#result')).to_have_text('Calculation Result: 15')
 
 @pytest.mark.e2e
 def test_calculator_divide_by_zero(page, fastapi_server):
@@ -70,4 +71,40 @@ def test_calculator_divide_by_zero(page, fastapi_server):
     # Use an assertion to check that the text within the result div (with id 'result') is exactly
     # "Error: Cannot divide by zero!". This verifies that the application handles division by zero
     # gracefully and displays the correct error message to the user.
-    assert page.inner_text('#result') == 'Error: Cannot divide by zero!'
+    expect(page.locator('#result')).to_have_text('Error: Cannot divide by zero!')
+
+@pytest.mark.e2e
+def test_calculator_subtract(page, fastapi_server):
+    """
+    Test the subtraction functionality of the calculator.
+    """
+    page.goto('http://localhost:8000')
+    page.fill('#a', '10')
+    page.fill('#b', '5')
+    page.click('button:text("Subtract")')
+
+    expect(page.locator('#result')).to_have_text('Calculation Result: 5')
+
+@pytest.mark.e2e
+def test_calculator_multiply(page, fastapi_server):
+    """
+    Test the multiplication functionality of the calculator.
+    """
+    page.goto('http://localhost:8000')
+    page.fill('#a', '10')
+    page.fill('#b', '5')
+    page.click('button:text("Multiply")')
+
+    expect(page.locator('#result')).to_have_text('Calculation Result: 50')
+
+@pytest.mark.e2e
+def test_calculator_divide(page, fastapi_server):
+    """
+    Test the division functionality of the calculator.
+    """
+    page.goto('http://localhost:8000')
+    page.fill('#a', '10')
+    page.fill('#b', '2')
+    page.click('button:text("Divide")')
+
+    expect(page.locator('#result')).to_have_text('Calculation Result: 5')

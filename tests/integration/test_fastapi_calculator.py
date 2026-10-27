@@ -25,6 +25,22 @@ def client():
         yield client  # Provide the TestClient instance to the test functions
 
 # ---------------------------------------------
+# Test Function: test_homepage
+# ---------------------------------------------
+
+def test_homepage(client):
+    """
+    Test the homepage endpoint.
+
+    This test verifies that the root endpoint returns the calculator page and
+    displays the expected "Hello World" heading.
+    """
+    response = client.get('/')
+
+    assert response.status_code == 200, f"Expected status code 200, got {response.status_code}"
+    assert "Hello World" in response.text, "Homepage does not contain the expected heading"
+
+# ---------------------------------------------
 # Test Function: test_add_api
 # ---------------------------------------------
 
