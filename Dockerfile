@@ -14,7 +14,7 @@ RUN apt-get update && \
    useradd -r -g appgroup appuser
 
 COPY requirements.txt .
-RUN pip install --no-cache-dir --update -r requirements.txt
+RUN pip install --no-cache-dir --upgrade -r requirements.txt
 
 COPY . .
 RUN chown -R appuser:appgroup /app
