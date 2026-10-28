@@ -46,6 +46,11 @@ jobs:
      
      - name: Build image
        run: docker build -t app:test .
+
+     - name: Verify installed dependencies
+       run: |
+        docker run --rm app:test python -m pip show urllib3 setuptools msgpack
+        docker run --rm app:test python -m pip check
      
      - name: Run Trivy vulnerability scanner
        uses: aquasecurity/trivy-action@master
